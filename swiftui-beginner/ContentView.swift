@@ -10,10 +10,17 @@ import SwiftUI
 struct ContentView: View {
     @State private var name = ""
     var body: some View {
-        Form{
-            ForEach(0..<100){
-                Text("row \($0)")
-            }
+        VStack{
+            Text("Practice App")
+                .font(.largeTitle)
+                .fontWeight(.heavy)
+                .foregroundColor(Color.red)
+                .multilineTextAlignment(.center)
+                .padding(.bottom)
+            Image("Bally_logo.svg")
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                
         }
     }
 }
