@@ -8,11 +8,16 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State private var name = ""
+    let students = ["john","umar","hello","dickhead"]
+    @State private var selectedStudent = "Student"
     var body: some View {
-        Form{
-            ForEach(0..<100){
-                Text("row \($0)")
+        NavigationView{
+            Form{
+                Picker("Select student", selection: $selectedStudent){
+                    ForEach(students, id: \.self){
+                        Text($0)
+                    }
+                }
             }
         }
     }
