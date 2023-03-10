@@ -57,7 +57,7 @@ struct ContentView: View {
                     Text("Price Per Person")
                 }
             }
-            .navigationTitle("WeSplit App")
+            .navigationTitle("WeSplit")
             .toolbar {
                 ToolbarItemGroup(placement: .keyboard) {
                     Spacer()
