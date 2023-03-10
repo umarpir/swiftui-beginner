@@ -8,18 +8,16 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State private var name = ""
     var body: some View {
         VStack{
-            Text("Practice App")
+            Image("Bally_logo.svg")
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+            Text("Learner App")
                 .font(.largeTitle)
                 .fontWeight(.heavy)
                 .foregroundColor(Color.red)
                 .multilineTextAlignment(.center)
-                .padding(.bottom)
-            Image("Bally_logo.svg")
-                .resizable()
-                .aspectRatio(contentMode: .fit)
                 
         }
     }
