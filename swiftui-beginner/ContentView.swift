@@ -11,8 +11,17 @@ struct ContentView: View {
     @State private var checkAmount = 0.00
     @State private var numberOfPeople = 2
     @State private var tipPercentage = 0.0
-    let tipPercentages  = [0,5,10,12.5,15,20,25]
-    
+    @FocusState private var amountIsFocused: Bool
+
+    let tipPercentages  = [0,0.1,0.125,0.15,0.2,0.25]
+    var totalPerPerson: Double {
+        let peopleCount = Double(numberOfPeople)
+        let tipSelection = Double(tipPercentage * 100)
+        let tipvalue = checkAmount / 100 * tipSelection
+        let grandTotal =  checkAmount + tipvalue
+        let pricePerPerson = grandTotal / peopleCount
+        return pricePerPerson
+    }
     var body: some View {
         NavigationView {
             Form {
@@ -20,13 +29,8 @@ struct ContentView: View {
                     TextField("Amount", value: $checkAmount, format:
                             .currency(code: Locale.current.currency?.identifier ?? "USD"))
                     .keyboardType(.decimalPad)
+                    .focused($amountIsFocused)
                     
-                    Picker("Tip/service charge %: ", selection: $tipPercentage){
-                        ForEach(0..<tipPercentages.count){
-                            let doublestr = String(format: "%.1f", tipPercentages[$0])
-                            Text("\(doublestr) %" ).tag($0)
-                        }
-                    }.pickerStyle(.navigationLink)
                     
                     Picker("Number of people", selection: $numberOfPeople){
                         ForEach(2..<100){
@@ -35,13 +39,33 @@ struct ContentView: View {
                     }.pickerStyle(.navigationLink)
                 }
                 
+                Section{
+                    Picker("Tip/service charge %: ", selection: $tipPercentage){
+                        ForEach(tipPercentages, id: \.self){
+                            //let doublestr = String(format: "%.1f", tipPercentages[$0])
+                            Text($0, format: .percent)
+                        }
+                    }.pickerStyle(.segmented)
+                } header: {
+                    Text("Tip/Service charge")
+                }
+                
                 
                 Section{
+                    Text(totalPerPerson, format: .currency(code: Locale.current.currency?.identifier ?? "USD"))
+                } header: {
                     Text("Price Per Person")
-                    Text(checkAmount, format: .currency(code: Locale.current.currency?.identifier ?? "USD"))
                 }
             }
             .navigationTitle("WeSplit App")
+            .toolbar {
+                ToolbarItemGroup(placement: .keyboard) {
+                    Spacer()
+                    Button("Done") {
+                        amountIsFocused = false
+                    }
+                }
+            }
         }
     }
     
