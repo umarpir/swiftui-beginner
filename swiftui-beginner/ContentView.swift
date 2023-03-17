@@ -10,16 +10,20 @@ import SwiftUI
 struct ContentView: View {
     var body: some View {
         VStack{
-            Image("Bally_logo.svg")
-                .resizable()
-                .aspectRatio(contentMode: .fit)
+            Link(destination: URL(string: "https://github.com/umarpir/swiftui-beginner")!) {
+                Image("Bally_logo.svg")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+            }
             Text("Learner App")
                 .font(.largeTitle)
                 .fontWeight(.heavy)
-                .foregroundColor(Color.red)
+                .foregroundColor(Color(red: 1.0, green: 0, blue: 0))
                 .multilineTextAlignment(.center)
+            
                 
         }
+        .padding(.all)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(.black)
     }
