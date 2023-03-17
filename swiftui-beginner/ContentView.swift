@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct ContentView: View {
+    @State private var colourToggle = true
     var body: some View {
         VStack{
             Link(destination: URL(string: "https://github.com/umarpir/swiftui-beginner")!) {
@@ -15,10 +16,12 @@ struct ContentView: View {
                     .resizable()
                     .aspectRatio(contentMode: .fit)
             }
-            Text("Learner App")
+            Button("Learner App"){
+                colourToggle.toggle()
+            }
                 .font(.largeTitle)
                 .fontWeight(.heavy)
-                .foregroundColor(Color(red: 1.0, green: 0, blue: 0))
+                .foregroundColor(colourToggle ? Color(red: 1.0, green: 0, blue: 0) : Color(red: .random(in: 0...1) , green: .random(in: 0...1), blue:  .random(in: 0...1)))
                 .multilineTextAlignment(.center)
             
                 
