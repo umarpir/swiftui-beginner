@@ -7,93 +7,29 @@
 
 import SwiftUI
 
-
-class User: ObservableObject{
-   @Published  var firstName = ""
-   @Published  var lastName = ""
-}
-
-struct Euser: Codable{
-    var name: String
-    var age: Int
-}
-
-struct SecondView: View{
-    var tapCount: Int
-    @Environment(\.dismiss) var dismiss
-    var body: some View{
-        VStack {
-            Text("second view")
-                .font(.largeTitle)
-            
-            Text("TAP-COUNT: \(tapCount)")
-                .font(.largeTitle)
-                .foregroundColor(Color.red)
-            
-            Button("Dismiss"){
-                dismiss()
-            }
-            .padding(.top)
-            .font(.headline)
-        }
-    }
-}
 struct ContentView: View {
-    @State private var colourToggle = true
-    @StateObject var user = User()
-    @State private var showingView = false
-    @AppStorage("tapCount") var tapCount = 0
-    
-    @State private var euser = Euser(name: "umar", age: 24)
-    
+    @StateObject var expenses = Expenses()
     var body: some View {
-        VStack{
-            Link(destination: URL(string: "https://github.com/umarpir/swiftui-beginner")!) {
-                Image("Bally_logo.svg")
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
+        NavigationView{
+            List{
+                ForEach(expenses.items){ item in
+                    Text(item.name)
+                }
+                .onDelete(perform: removeItems)
             }
-            Button("Learner App"){
-                colourToggle.toggle()
-                showingView.toggle()
-                tapCount += 1
-                
-            } .font(.largeTitle)
-                .fontWeight(.heavy)
-            
-            Button("save user"){
-                let encoder = JSONEncoder()
-                
-                if let data = try? encoder.encode(euser){
-                    UserDefaults.standard.set(data, forKey: "UserData")
+            .navigationTitle("iExpense")
+            .toolbar{
+                Button {
+                    let expense = ExpenseItem(name: "burgaaa", type: "Food", amount: 2.50)
+                    expenses.items.append(expense)
+                } label: {
+                    Image(systemName: "plus")
                 }
             }
-            
-            .foregroundColor(Color.blue)
-                .padding(.vertical)
-            .sheet(isPresented: $showingView){
-                SecondView(tapCount: tapCount)
-            }
-                .font(.largeTitle)
-                .fontWeight(.heavy)
-                .foregroundColor(colourToggle ? Color(red: 1.0, green: 0, blue: 0) : Color(red: .random(in: 0...1) , green: .random(in: 0...1), blue:  .random(in: 0...1)))
-                .multilineTextAlignment(.center)
-            
-            VStack {
-                Text("First name: \(user.firstName)")
-                Text("Last name: \(user.lastName)")
-            }
-            .foregroundColor(Color.red)
-            Spacer()
-            HStack {
-                TextField("Enter First Name", text: $user.firstName)
-                TextField("Enter Last Name", text: $user.lastName)
-            } .foregroundColor(Color.red)
-            Spacer()
         }
-        .padding(.all)
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(.black)
+    }
+    func removeItems(offsets: IndexSet){
+        expenses.items.remove(atOffsets: offsets)
     }
 }
 
